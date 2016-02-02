@@ -1,0 +1,288 @@
+#set your working directory. This will be different for each user.
+setwd("~/Dropbox/Canareae_project/functional morphology/analyses for supplement/LEMURS/PHYLOMORPHOSPACE")
+library(ape);library(phytools);library(coda);library(diversitree);library(geiger);library(nlme);library(phylolm);library(PBSmapping);library(siar);library(spatstat)
+traits<-read.csv("phylomorphospace_data.csv")
+trait.data<-data.frame(traits)
+rownames(trait.data)<-traits[,1] #make species rownames
+names(trait.data)
+trait.data<-trait.data[,5:14] #define the trait data
+row.names(trait.data)
+size<-c(traits[,4]) #pull out body mass
+log(size)->lsize
+g<-unique(traits[,1])
+names(lsize)<-g
+log(trait.data)->ltrait.data
+ltrait<-as.matrix(ltrait.data)
+lemur_tree<-read.nexus ("Final_lemur")
+name.check(lemur_tree, lsize)->lemurOverlap
+lemurOverlap$tree_not_data
+lemurTree<-drop.tip(lemur_tree, lemurOverlap$tree_not_data)
+plot(lemurTree)
+name.check(lemurTree, lsize)
+phyl.resid(lemurTree,lsize,ltrait,method="BM")->resids
+as.matrix(resids$resid)->X
+head(X)
+result<-phyl.pca(lemurTree, X,method="lambda",mode="corr")
+result$S->fruitomorphospaceAll
+summary(result)
+result$S
+setwd("~/Dropbox/Canareae_project/functional morphology/analyses for supplement/LEMURS/PHYLOMORPHOSPACE")
+library(xlsx);library(ape);library(phytools);library(coda);library(diversitree);library(geiger);library(nlme);library(MCMCglmm);library(phylolm);library(PBSmapping);library(siar);library(spatstat);library("sp");library("rgdal"); library(rgeos)
+fruit<-read.csv("frugivores_pca.csv")
+fruit<-read.csv("frugivores_pca.csv")
+spx <- split(fruit$x,fruit$group1)
+spx <- split(fruit$x,fruit$Group1)
+spy <- split(fruit$y,fruit$Group1)
+spx2 <- split(fruit$x,fruit$Group2)
+spy2 <- split(fruit$y,fruit$Group2)
+spx
+extinct<-convexhull(spx[[2]],spy[[2]])
+extinct <- c(extinct, extinct[1])
+all<-convexhull(fruit$x),fruit$y)
+all<-convexhull(fruit$x,fruit$y)
+all <- c(all, all[1])
+extant<-convexhull(spx[,1], spy[,1] )
+extant<-convexhull(spx[[2]],spy[[2]])#
+extant <- c(extinct, extinct[1])
+all<-convexhull(fruit$x,fruit$y)#
+all <- c(all, all[1])
+spy
+fruit<-read.csv("frugivores_pca.csv")
+spx <- split(fruit$x,fruit$Group)
+spy <- split(fruit$y,fruit$Group)
+spy
+spx
+extant<-convexhull(spx[[1]],spy[[1]])
+extant <- c(extinct, extinct[1])
+extinct<-convexhull(spx[[2]], spy[[2]] )
+extinct <- c(extinct, extinct[1])
+all<-convexhull(fruit$x,fruit$y)
+all <- c(all, all[1])
+extant
+plot(all$xcoords, all$ycoords, col="blue")#
+lines(all$xcoords, all$ycoords, col="blue")#
+points(extinct$xcoords, extinct$ycoords, col="gold1")#
+lines(extinct$xcoords, extinct$ycoords, col="gold1")#
+points(extant$xcoords, extant$ycoords, col="green")#
+lines(extant$xcoords, extant$ycoords, col="green")
+plot(all$xcoords, all$ycoords, col="blue")#
+lines(all$xcoords, all$ycoords, col="blue")
+lines(extinct$xcoords, extinct$ycoords, col="gold1")
+points(extant$xcoords, extant$ycoords, col="green")
+lines(extant$xcoords, extant$ycoords, col="green")
+extant<-convexhull(spx[[1]],spy[[1]])
+extant <- c(extinct, extinct[1])
+extant <- c(extant, extant[1])
+extant<-convexhull(spx[[1]],spy[[1]])
+extant <- c(extant, extant[1])
+plot(all$xcoords, all$ycoords, col="blue")#
+lines(all$xcoords, all$ycoords, col="blue")#
+points(extinct$xcoords, extinct$ycoords, col="gold1")#
+lines(extinct$xcoords, extinct$ycoords, col="gold1")#
+points(extant$xcoords, extant$ycoords, col="green")#
+lines(extant$xcoords, extant$ycoords, col="green")
+lostArea<-all$TA-extant$TA # lost area is 246
+lostArea
+pct<-(lostArea/all$TA)*100
+pct
+library(xlsx);library(ape);library(phytools);library(coda);library(diversitree);library(geiger)
+getwd()
+setwd("~/Dropbox/Canareae_project/functional morphology/analyses for supplement/CANARIUM")
+fruit<-read.csv("Canarieae_fruit.csv")
+names(fruit)#
+head(fruit)
+fruit.data<-data.frame(fruit[,3])
+fruit.data$width<-log(fruit.data[,1]/10)
+rownames(fruit.data)<-fruit[,1]
+head(fruit.data)
+phyl<-read.tree("Canarieae_ingroup.phy")
+plot(phyl)
+malagasy_canarium<-read.tree("Canarieae_ingroup.phy")
+name.check(malagasy_canarium, fruit.data)->phylOverlap
+phylOverlap$tree_not_data
+canTree<-drop.tip(phyl, phylOverlap$tree_not_data)
+plot(canTree)
+name.check(canTree, fruit.data)
+width <-data.frame(fruit.data[,2])#
+rownames(width)<-fruit[,1]#
+X<-as.matrix(width, row.names=1)[,1]#
+head(X)#
+obj<-contMap(canTree, X, res=100, plot=T, method="anc.ML", lwd=0.8, fsize=0.55, outline=F)
+width <-data.frame(fruit.data[,2])#
+rownames(width)<-fruit[,1]#
+X<-as.matrix(width, row.names=1)[,1]#
+head(X)#
+obj<-contMap(canTree, X, res=100, plot=T, method="anc.ML", lwd=0.8, fsize=0.55, outline=F)
+malagasy<-read.csv("malagasy_canarium_fruit.csv")
+names(malagasy)
+malagasy.data<-data.frame(malagasy[,3])
+malagasy.data$width<-log(malagasy.data[,1]/10)
+rownames(malagasy.data)<-fruit[,1]
+rownames(malagasy.data)<-malagasy[,1]
+canarieae<-read.tree("Canarieae_ingroup.phy")
+name.check(canarieae, malagasy.data)->phylOverlap
+phylOverlap$tree_not_data
+malagasy_canarium<-drop.tip(phyl, phylOverlap$tree_not_data)
+plot(malagasyTree)
+plot(malagasy_canarium)
+name.check(malagasy_canarium, fruit.data)
+name.check(malagasy_canarium, malaagsy.data)
+canarieae<-read.tree("Canarieae_ingroup.phy")
+name.check(canarieae, malagasy.data)->phylOverlap
+phylOverlap$tree_not_data
+malagasy_canarium<-drop.tip(canarieae, phylOverlap$tree_not_data)
+plot(malagasy_canarium)
+name.check(malagasy_canarium, malaagsy.data)
+name.check(malagasy_canarium, malagasy.data)
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+malagasy<-read.csv("malagasy_canarium_fruit.csv")#
+malagasy.data<-data.frame(malagasy[,3])#
+malagasy.data$width<-log(malagasy.data[,1]/10)#
+rownames(malagasy.data)<-malagasy[,1]
+name.check(canarieae, malagasy.data)->phylOverlap#
+phylOverlap$tree_not_data#
+malagasy_canarium<-drop.tip(canarieae, phylOverlap$tree_not_data)#
+plot(malagasy_canarium)#
+name.check(malagasy_canarium, malagasy.data)
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)
+AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)
+plot(AA,legend=FALSE)
+phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE)
+malagasy.data$width<-log(malagasy.data)
+malagasy<-read.csv("malagasy_canarium_fruit.csv")
+malagasy.data<-data.frame(malagasy[,3])
+malagasy.data$width<-log(malagasy.data)
+rownames(malagasy.data)<-malagasy[,1]
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)
+AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE)
+x<-as.matrix(malagasy.data)[,1]
+rownames(malagasy.data)<-malagasy[,1]
+x<-as.matrix(malagasy.data)[,1]
+malagasy.data$width<-log(malagasy.data[,1])
+rownames(malagasy.data)<-malagasy[,1]
+x<-as.matrix(malagasy.data)[,1]
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)
+plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE)
+malagasy.data<-data.frame(malagasy[,2:3])
+malagasy.data$width<-log(malagasy.data[,2]/10)#
+malagasy.data$length<-log(malagasy.data[,1]/10)
+rownames(malagasy.data)<-malagasy[,1]
+head(malagasy.data)
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+malagasy.data<-malagasy.data[,3:4]
+rownames(malagasy.data)<-malagasy[,1]
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE)
+malagasy<-read.csv("malagasy_canarium_fruit.csv")
+head(malagasy)
+malagasy.data<-data.frame(malagasy[,2:3])#
+malagasy.data$length<-log(malagasy.data[,1]/10)#
+malagasy.data$width<-log(malagasy.data[,2]/10)#
+malagasy.data<-malagasy.data[,3:4]
+head(malagasy.data)
+rownames(malagasy.data)<-malagasy[,1]
+x<-as.matrix(malagasy.data)[,1]#
+AA<-contMap(malagasy_canarium, x)#
+ H<-nodeHeights(malagasy_canarium)#
+ h<-max(H)#
+  AA$cols[]<-rainbow(1001,start=0.7,end=4/6)#
+   for(i in 1:nrow(H)) names(AA$tree$maps[[i]])<- round((H[i,1]+cumsum(AA$tree$maps[[i]]))/h*1000)#
+#
+ plot(AA,legend=FALSE)#
+ # check to verify that temporal information is correct#
+ #plot(AA,legend=FALSE)#
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+mar.default <- c(5,4,4,2) + 0.1#
+par(mar = mar.default + c(0, 4, 0, 0)) #
+ phylomorphospace(AA$tree,malagasy.data,colors=AA$cols,lwd=3, node.by.map=TRUE,ylim=c(0.74,1.38), xlim=c(1.0,1.65))
+library(ape);library(phytools);library(coda);library(diversitree);library(geiger);library(nlme);library(phylolm);library(PBSmapping);library(siar);library(spatstat)
+setwd("~/Dropbox/Canareae_project/functional morphology/analyses for supplement/LEMURS/PHYLOMORPHOSPACE")
+traits<-read.csv("phylomorphospace_data.csv")
+trait.data<-data.frame(traits)
+rownames(trait.data)<-traits[,1] #make species rownames
+names(trait.data)
+trait.data<-trait.data[,5:14] #define the trait data
+row.names(trait.data)
+size<-c(traits[,4]) #pull out body mass
+log(size)->lsize
+g<-unique(traits[,1])
+names(lsize)<-g
+log(trait.data)->ltrait.data
+ltrait<-as.matrix(ltrait.data)
+lemur_tree<-read.nexus ("Final_lemur")#
+name.check(lemur_tree, lsize)->lemurOverlap#
+lemurOverlap$tree_not_data#
+lemurTree<-drop.tip(lemur_tree, lemurOverlap$tree_not_data)#
+name.check(lemurTree, lsize)
+phyl.resid(lemurTree,lsize,ltrait,method="BM")->resids#
+as.matrix(resids$resid)->X#
+head(X)#
+result<-phyl.pca(lemurTree, X,method="lambda",mode="corr")#
+result$S->fruitomorphospaceAll#
+summary(result)#
+result$S
+summary(R)
+summary(result)
+result
